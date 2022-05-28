@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Eureka.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="alumnos">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="matricula" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="asistencias">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fecha" Type="date" Nullable="false" />
+    <Property Name="tipo_asistencia" Type="int" Nullable="false" />
+    <Property Name="id_asistencias_has_alumnos" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="asistencias_has_alumnos">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="docentes_materias_id" Type="int" Nullable="false" />
+    <Property Name="alumnos_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="docentes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="no_empleado" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="apellido_pat" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="apellido_mat" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="docentes_materias">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="iddocente" Type="int" Nullable="false" />
+    <Property Name="idmateria" Type="int" Nullable="false" />
+    <Property Name="idperiodo" Type="int" Nullable="false" />
+    <Property Name="lunes" Type="tinyint" Nullable="false" />
+    <Property Name="hora_lunes" Type="time" Precision="7" Nullable="false" />
+    <Property Name="martes" Type="tinyint" Nullable="false" />
+    <Property Name="miercoles" Type="tinyint" Nullable="false" />
+    <Property Name="jueves" Type="tinyint" Nullable="false" />
+    <Property Name="viernes" Type="tinyint" Nullable="false" />
+    <Property Name="sabado" Type="tinyint" Nullable="false" />
+    <Property Name="hora_martes" Type="time" Precision="7" Nullable="false" />
+    <Property Name="hora_miercoles" Type="time" Precision="7" Nullable="false" />
+    <Property Name="hora_jueves" Type="time" Precision="7" Nullable="false" />
+    <Property Name="hora_viernes" Type="time" Precision="7" Nullable="false" />
+    <Property Name="hora_sabado" Type="time" Precision="7" Nullable="false" />
+  </EntityType>
+  <EntityType Name="materias">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="clave" Type="int" Nullable="false" />
+    <Property Name="materia" Type="varchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <EntityType Name="periodos">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="periodo" Type="varchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <Association Name="asistencias_asistenciasalumnos">
+    <End Role="asistencias_has_alumnos" Type="Self.asistencias_has_alumnos" Multiplicity="1" />
+    <End Role="asistencias" Type="Self.asistencias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="asistencias_has_alumnos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="asistencias">
+        <PropertyRef Name="id_asistencias_has_alumnos" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="asistenciasalumnos_alumnos">
+    <End Role="alumnos" Type="Self.alumnos" Multiplicity="1" />
+    <End Role="asistencias_has_alumnos" Type="Self.asistencias_has_alumnos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="alumnos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="asistencias_has_alumnos">
+        <PropertyRef Name="alumnos_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="asistenciasalumnos_docentes_materias">
+    <End Role="docentes_materias" Type="Self.docentes_materias" Multiplicity="1" />
+    <End Role="asistencias_has_alumnos" Type="Self.asistencias_has_alumnos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="docentes_materias">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="asistencias_has_alumnos">
+        <PropertyRef Name="docentes_materias_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="docentesmaterias_docente">
+    <End Role="docentes" Type="Self.docentes" Multiplicity="1" />
+    <End Role="docentes_materias" Type="Self.docentes_materias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="docentes">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="docentes_materias">
+        <PropertyRef Name="iddocente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="docentesmaterias_materia">
+    <End Role="materias" Type="Self.materias" Multiplicity="1" />
+    <End Role="docentes_materias" Type="Self.docentes_materias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="materias">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="docentes_materias">
+        <PropertyRef Name="idmateria" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="docentesmaterias_periodo">
+    <End Role="periodos" Type="Self.periodos" Multiplicity="1" />
+    <End Role="docentes_materias" Type="Self.docentes_materias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="periodos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="docentes_materias">
+        <PropertyRef Name="idperiodo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="EurekaStoreContainer">
+    <EntitySet Name="alumnos" EntityType="Self.alumnos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="asistencias" EntityType="Self.asistencias" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="asistencias_has_alumnos" EntityType="Self.asistencias_has_alumnos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="docentes" EntityType="Self.docentes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="docentes_materias" EntityType="Self.docentes_materias" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="materias" EntityType="Self.materias" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="periodos" EntityType="Self.periodos" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="asistencias_asistenciasalumnos" Association="Self.asistencias_asistenciasalumnos">
+      <End Role="asistencias_has_alumnos" EntitySet="asistencias_has_alumnos" />
+      <End Role="asistencias" EntitySet="asistencias" />
+    </AssociationSet>
+    <AssociationSet Name="asistenciasalumnos_alumnos" Association="Self.asistenciasalumnos_alumnos">
+      <End Role="alumnos" EntitySet="alumnos" />
+      <End Role="asistencias_has_alumnos" EntitySet="asistencias_has_alumnos" />
+    </AssociationSet>
+    <AssociationSet Name="asistenciasalumnos_docentes_materias" Association="Self.asistenciasalumnos_docentes_materias">
+      <End Role="docentes_materias" EntitySet="docentes_materias" />
+      <End Role="asistencias_has_alumnos" EntitySet="asistencias_has_alumnos" />
+    </AssociationSet>
+    <AssociationSet Name="docentesmaterias_docente" Association="Self.docentesmaterias_docente">
+      <End Role="docentes" EntitySet="docentes" />
+      <End Role="docentes_materias" EntitySet="docentes_materias" />
+    </AssociationSet>
+    <AssociationSet Name="docentesmaterias_materia" Association="Self.docentesmaterias_materia">
+      <End Role="materias" EntitySet="materias" />
+      <End Role="docentes_materias" EntitySet="docentes_materias" />
+    </AssociationSet>
+    <AssociationSet Name="docentesmaterias_periodo" Association="Self.docentesmaterias_periodo">
+      <End Role="periodos" EntitySet="periodos" />
+      <End Role="docentes_materias" EntitySet="docentes_materias" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

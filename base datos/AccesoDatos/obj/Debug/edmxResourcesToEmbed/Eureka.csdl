@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Eureka" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="alumno">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="matricula" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="asistencias_has_alumnos" Relationship="Self.asistenciasalumnos_alumnos" FromRole="alumnos" ToRole="asistencias_has_alumnos" />
+  </EntityType>
+  <EntityType Name="asistencia">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="tipo_asistencia" Type="Int32" Nullable="false" />
+    <Property Name="id_asistencias_has_alumnos" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="asistencias_has_alumnos" Relationship="Eureka.asistencias_asistenciasalumnos" FromRole="asistencia" ToRole="asistencias_has_alumnos" />
+  </EntityType>
+  <EntityType Name="asistencias_has_alumnos">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="docentes_materias_id" Type="Int32" Nullable="false" />
+    <Property Name="alumnos_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="alumno" Relationship="Self.asistenciasalumnos_alumnos" FromRole="asistencias_has_alumnos" ToRole="alumnos" />
+    <NavigationProperty Name="docentes_materias" Relationship="Self.asistenciasalumnos_docentes_materias" FromRole="asistencias_has_alumnos" ToRole="docentes_materias" />
+    <NavigationProperty Name="asistencias" Relationship="Eureka.asistencias_asistenciasalumnos" FromRole="asistencias_has_alumnos" ToRole="asistencia" />
+  </EntityType>
+  <EntityType Name="docente">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="no_empleado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="apellido_pat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="apellido_mat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="docentes_materias" Relationship="Self.docentesmaterias_docentes" FromRole="docentes" ToRole="docentes_materias" />
+  </EntityType>
+  <EntityType Name="docentes_materias">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="iddocente" Type="Int32" Nullable="false" />
+    <Property Name="idmateria" Type="Int32" Nullable="false" />
+    <Property Name="idperiodo" Type="Int32" Nullable="false" />
+    <Property Name="lunes" Type="Byte" Nullable="false" />
+    <Property Name="hora_lunes" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="martes" Type="Byte" Nullable="false" />
+    <Property Name="miercoles" Type="Byte" Nullable="false" />
+    <Property Name="jueves" Type="Byte" Nullable="false" />
+    <Property Name="viernes" Type="Byte" Nullable="false" />
+    <Property Name="sabado" Type="Byte" Nullable="false" />
+    <Property Name="hora_martes" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="hora_miercoles" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="hora_jueves" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="hora_viernes" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="hora_sabado" Type="Time" Nullable="false" Precision="7" />
+    <NavigationProperty Name="asistencias_has_alumnos" Relationship="Self.asistenciasalumnos_docentes_materias" FromRole="docentes_materias" ToRole="asistencias_has_alumnos" />
+    <NavigationProperty Name="docente" Relationship="Self.docentesmaterias_docentes" FromRole="docentes_materias" ToRole="docentes" />
+    <NavigationProperty Name="periodo" Relationship="Self.docentesmaterias_docentes_periodo" FromRole="docentes_materias" ToRole="periodos" />
+    <NavigationProperty Name="materia" Relationship="Self.docentesmaterias_materias" FromRole="docentes_materias" ToRole="materias" />
+  </EntityType>
+  <EntityType Name="materia">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="clave" Type="Int32" Nullable="false" />
+    <Property Name="materia1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="docentes_materias" Relationship="Self.docentesmaterias_materias" FromRole="materias" ToRole="docentes_materias" />
+  </EntityType>
+  <EntityType Name="periodo">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="periodo1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="docentes_materias" Relationship="Self.docentesmaterias_docentes_periodo" FromRole="periodos" ToRole="docentes_materias" />
+  </EntityType>
+  <Association Name="asistenciasalumnos_alumnos">
+    <End Role="alumnos" Type="Self.alumno" Multiplicity="1" />
+    <End Role="asistencias_has_alumnos" Type="Self.asistencias_has_alumnos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="alumnos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="asistencias_has_alumnos">
+        <PropertyRef Name="alumnos_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="asistenciasalumnos_docentes_materias">
+    <End Role="docentes_materias" Type="Self.docentes_materias" Multiplicity="1" />
+    <End Role="asistencias_has_alumnos" Type="Self.asistencias_has_alumnos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="docentes_materias">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="asistencias_has_alumnos">
+        <PropertyRef Name="docentes_materias_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="docentesmaterias_docentes">
+    <End Role="docentes" Type="Self.docente" Multiplicity="1" />
+    <End Role="docentes_materias" Type="Self.docentes_materias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="docentes">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="docentes_materias">
+        <PropertyRef Name="iddocente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="docentesmaterias_docentes_periodo">
+    <End Role="periodos" Type="Self.periodo" Multiplicity="1" />
+    <End Role="docentes_materias" Type="Self.docentes_materias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="periodos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="docentes_materias">
+        <PropertyRef Name="idperiodo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="docentesmaterias_materias">
+    <End Role="materias" Type="Self.materia" Multiplicity="1" />
+    <End Role="docentes_materias" Type="Self.docentes_materias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="materias">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="docentes_materias">
+        <PropertyRef Name="idmateria" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="EurekaBD" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="alumnos" EntityType="Self.alumno" />
+    <EntitySet Name="asistencias" EntityType="Self.asistencia" />
+    <EntitySet Name="asistencias_has_alumnos" EntityType="Self.asistencias_has_alumnos" />
+    <EntitySet Name="docentes" EntityType="Self.docente" />
+    <EntitySet Name="docentes_materias" EntityType="Self.docentes_materias" />
+    <EntitySet Name="materias" EntityType="Self.materia" />
+    <EntitySet Name="periodos" EntityType="Self.periodo" />
+    <AssociationSet Name="asistenciasalumnos_alumnos" Association="Self.asistenciasalumnos_alumnos">
+      <End Role="alumnos" EntitySet="alumnos" />
+      <End Role="asistencias_has_alumnos" EntitySet="asistencias_has_alumnos" />
+    </AssociationSet>
+    <AssociationSet Name="asistenciasalumnos_docentes_materias" Association="Self.asistenciasalumnos_docentes_materias">
+      <End Role="docentes_materias" EntitySet="docentes_materias" />
+      <End Role="asistencias_has_alumnos" EntitySet="asistencias_has_alumnos" />
+    </AssociationSet>
+    <AssociationSet Name="docentesmaterias_docentes" Association="Self.docentesmaterias_docentes">
+      <End Role="docentes" EntitySet="docentes" />
+      <End Role="docentes_materias" EntitySet="docentes_materias" />
+    </AssociationSet>
+    <AssociationSet Name="docentesmaterias_docentes_periodo" Association="Self.docentesmaterias_docentes_periodo">
+      <End Role="periodos" EntitySet="periodos" />
+      <End Role="docentes_materias" EntitySet="docentes_materias" />
+    </AssociationSet>
+    <AssociationSet Name="docentesmaterias_materias" Association="Self.docentesmaterias_materias">
+      <End Role="materias" EntitySet="materias" />
+      <End Role="docentes_materias" EntitySet="docentes_materias" />
+    </AssociationSet>
+    <AssociationSet Name="asistencias_asistenciasalumnos" Association="Eureka.asistencias_asistenciasalumnos">
+      <End Role="asistencias_has_alumnos" EntitySet="asistencias_has_alumnos" />
+      <End Role="asistencia" EntitySet="asistencias" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="asistencias_asistenciasalumnos">
+    <End Type="Eureka.asistencias_has_alumnos" Role="asistencias_has_alumnos" Multiplicity="1" />
+    <End Type="Eureka.asistencia" Role="asistencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="asistencias_has_alumnos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="asistencia">
+        <PropertyRef Name="id_asistencias_has_alumnos" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
